@@ -7,7 +7,7 @@
  *
  * Funçoes usadas em Compress.c
  *
- * Linhas: 14 até 99
+ * Linhas: 14 até 104
  */
 
 
@@ -19,6 +19,7 @@ void conting_freq(FILE *file_input, hash *Hash);
  * salvo em uma hash com 256 posições, onde cada posição representará o
  * caractere em decimal de acordo com a ASCII. Os argumentos necessários são
  * o arquivo de entrada a ser lido e a Hash table.
+ *
  */
 Nodes *construct_tree(char nome_arquivo[], FILE *file_input);
 
@@ -50,18 +51,23 @@ void Encode(Nodes *root, hash *HASH, char *new_path_bits);
  * Os argumentos necessários são: raíz da arvore, uma Hash e o array para guardar os bits.
  *
  */
-void get_header_compactacao(FILE* fileout, hash *HASH, Nodes *root,
-		int tam_arvore);
+void get_header_compact(FILE* fileout, hash *HASH, Nodes *root,
+		int len_tree);
 /*
- *
- * AINDA NAO SEI COMO FUNCIONA DIREITO
+ * Essa função irá pegar o tamanho do lixo do arquivo e tamanho da arvore
+ * para poder formar o cabeçalho. Serão 3 bits de lixo e 13 bits para o tamanho da árvore.
+ * Serão dois bytes que ao final iremos juntá-los em um único bit com o operador lógico ou (|)
+ * A operação utiliza do operador shift bit (<< e >>).
+ * Após a operação citada será impresso no arquivo de saída e em seguida impresso a arvore
+ * em pré ordem.
+ * Os argumentos são: arquivo de saída, uma Hash, raiz da arvore o tamanho da arvore.
  *
  */
 void insert_header_file(char nome_arquivo[], hash *HASH, Nodes *root,
 		unsigned long long int size_tree, FILE *file_input);
 
 /*
- * Essa funcão irá chamar get_header_compactactacao() para que seja escrito no
+ * Essa funcão irá chamar get_header_compact() para que seja escrito no
  * arquivo de saída o cabeçalho do programa. Será escrito o lixo e a árvore em pré-ordem.
  * Depois irá chamar a funcao insert_file_binary() para continuar escrevendo no arquivo
  * os novos bytes comprimidos com o auxilio da funcao is_set_bit() e caracteres da Hash;
@@ -70,7 +76,8 @@ void insert_header_file(char nome_arquivo[], hash *HASH, Nodes *root,
  *
  */
 
-void insert_file_binary(FILE *file_input, FILE *file_out, hash *HASH,char nome_arquivo[]);
+void insert_file_binary(FILE *file_input, FILE *file_out, hash *HASH,
+	char nome_arquivo[]);
 
 /*
  * Essa funcão irá realizar a compressao dos bytes e jogá-los no novo arquivo de saída
@@ -91,6 +98,7 @@ void insert_file_binary(FILE *file_input, FILE *file_out, hash *HASH,char nome_a
 void compress();
 
 /*
+ * 
  * Essa será a função principal no qual chamará todas as funções:
  * conting_freq(), construct_tree(), encode(), get_header_compactacao(),
  * insert_file_binary(), insert_header_file().
@@ -106,7 +114,7 @@ void compress();
  * Linhas: 50 até ***
  */
 
-void get_header(FILE *file, unsigned int *tam_lixo, unsigned int *tam_arv);
+void get_header_descompress(FILE *file, unsigned int *tam_lixo, unsigned int *tam_arv);
 
 /*
  * NAO SEI DIREITO
@@ -131,9 +139,11 @@ long long int FileSize(FILE *in);
  */
 
 void descompress();
+
 /*
- *
- *
+ * Essa será a função principal no qual chamará todas as funções:
+ * get_header_descompress(), construct_tree_descompress(), FileSize().
+ * 
  */
 
 
@@ -181,42 +191,46 @@ void Swap(Nodes **a, Nodes **b);
 
 int GetParentIndex(int index);
 
-/*Essa função retorna o index do pai*/
+/* Essa função retorna o index do pai*/
 
 int GetChildrenLeftIndex(int index);
 
-/*Essa função retorna o index do filho a esquerda*/
+/* Essa função retorna o index do filho a esquerda*/
 
 int GetChildrenRightIndex(int index);
 
- /*Essa função retorna o index do filho a direita da raiz*/
+/* Essa função retorna o index do filho a direita da raiz*/
 
 void View(heap *Heap);
 
-/*Essa função serve para mostrarmos na saída os caracteres e a sua frequência */
+/* Essa função serve para mostrarmos na saída os caracteres e a sua frequência */
 
 void DownHeapMin(int index, heap *Heap);
 
-/*Após a exclusão de algum elemento essa função é chamada para que possamos manter a característica da miniheap.
-*Característica:todos os nós pais são menores que os nós filhos.
+/*
+ * Após a exclusão de algum elemento essa função é chamada para que possamos manter a característica da miniheap.
+ * Característica:todos os nós pais são menores que os nós filhos.
+ *
 */
 
 Nodes *Pop(heap *Heap);
 
-/*Usamos essa função para "eliminar" o nó raiz colocando o último elemento da estrutura na posição dele 
-e o nó raiz que queremos remover colocamos na última posição e por fim 
-diminuimos a quantidade de elementos.
+/*
+ * Usamos essa função para "eliminar" o nó raiz colocando o último elemento da estrutura na posição dele
+ * e o nó raiz que queremos remover colocamos na última posição e por fim
+ * diminuimos a quantidade de elementos.
+ *
 */
 
 void UpHeapMin(int index, heap *Heap);
 
-/*Essa função tem como objetivo ordenar os nós de forma crescente.*/
+/* Essa função tem como objetivo ordenar os nós de forma crescente.*/
 
 void Insert(int Value, char character, heap *Heap, Nodes *left, Nodes *right);
 
-/*Aqui é onde inserimos os elementos na estrutura.*/
+/* Aqui é onde inserimos os elementos na estrutura.*/
 
-int eh_folha(Nodes *huffman_node);
+int is_leaf(Nodes *huffman_node);
 
 /*
  * Dado um nó de uma árvore essa funcão verifica se ele possui
@@ -225,11 +239,6 @@ int eh_folha(Nodes *huffman_node);
  * O argumento é o node.
  */
 
-/*
- * Essa função serve para verificar se dado a raiz de uma arvore
- * seus filhos a esquerda e direita estão NULOS
- * Retorna 1 em caso positivo, 0 caso contrário.
- */
 void print_tree_huffman(Nodes *huffman_node);
 
 /*
@@ -249,7 +258,7 @@ void print_tree_huffman_file(FILE *output_file, Nodes *huffman_node);
  */
 
 
-int esta_vazia(Nodes *raiz);
+int is_empty(Nodes *raiz);
 
 /*
  * Essa função verifica se a árvore está vazia,
@@ -284,7 +293,7 @@ unsigned char set_bit(unsigned char c, int i);
  * Os argumentos são: um caractere sem sinal e um inteiro
  *
  */
-int Cont_lixo_file(hash *HASH);
+int count_trash_file(hash *HASH);
 
 /*
  *  Essa função tem o objetivo de descobrir o lixo que terá os novos bits do nosso arquivo.
