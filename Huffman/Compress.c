@@ -31,9 +31,7 @@ Nodes *construct_tree(char nome_arquivo[], FILE *file_input, hash *Hash) {
 	} else {
 		conting_freq(file_input, Hash);
 	}
-	/*printf("****************************************\n");
-	 printf("SIZE FILE: %lld\n", FileSize(file_input));
-	 printf("****************************************\n");*/
+
 	for (i = 0; i < 256; i++) {
 		if (Hash->array[i]->frequencia >= 1) {
 			Insert(Hash->array[i]->frequencia, i, Heap, NULL, NULL);
@@ -56,26 +54,12 @@ Nodes *construct_tree(char nome_arquivo[], FILE *file_input, hash *Hash) {
 			Insert(esq->frequency + dir->frequency, asterisco, Heap, esq, dir);
 		}
 	}
-	/*while (!(Heap->size == 1)) {
-		left = Pop(Heap);
-		right = Pop(Heap);
-		if ((right->character = '*' && left->character != '*')
-				&& (right->frequency == left->frequency)) {
-			Insert(left->frequency + right->frequency, '*', Heap, right, left);
-		} else {
-			Insert(left->frequency + right->frequency, '*', Heap, left, right);
-		}
-	}*/
-	//Nodes *root = Heap[1];
-	//return root = Heap->table[Heap->size];
-	//View(Heap);
 }
 
 void Encode(Nodes *root, hash *HASH, char *new_path_bits) {
 	if (root != NULL) {
 		unsigned char item = root->character;
 		if (eh_folha(root)) {
-			//printf("%c : %s\n", item, new_path_bits);
 			strcat(HASH->array[item]->bits, new_path_bits);
 			HASH->array[item]->frequencia = root->frequency;
 			HASH->array[item]->c = root->character;
@@ -133,14 +117,7 @@ void insert_header_file(char nome_arquivo[], hash *HASH, Nodes *root,
 
 	file_output = fopen(nome_file_output, "wb");
 	get_header_compactacao(file_output, HASH, root, size_tree);
-	//printf("PRE ORDEM: ");
-	//print_tree_huffman(root);
-	//printf("\n");
 	convert_size_tree_to_bin(size_tree, bin_tam);
-	/*for (i = 0; i < 14; i++) {
-	 printf("%d", bin_tam[i]);
-	 }
-	 printf("\n");*/
 	insert_file_binary(file_input, file_output, HASH, nome_arquivo);
 }
 void compress() {
@@ -158,17 +135,8 @@ void compress() {
 	Encode(root, HASH, vetor);
 	int tam_str = strlen(vetor);
 	size_tree = lenght_tree(root);
-	//printf("TAM DA ARVORE EM DECIMAL: %lld\n", size_tree);
-
-	/*for (i = 0; i < 256; i++) {
-	 if (HASH->array[i]->frequencia > 1) {
-	 printf("CHAR: %c BITS: %s FREQ: %d\n", HASH->array[i]->c,
-	 HASH->array[i]->bits, HASH->array[i]->frequencia);
-	 }
-	 }*/
 	int tam_lixo = Cont_lixo_file(HASH);
 	//printf("LIXO: %d\n", tam_lixo);
 	insert_header_file(nome_arquivo, HASH, root, size_tree, file_input);
-	//insert_file_binary(file_input, file_output, HASH, nome_arquivo);
 	printf("Compactado com sucesso!\n");
 }
