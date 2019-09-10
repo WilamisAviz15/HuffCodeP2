@@ -133,14 +133,6 @@ void insert_header_file(char nome_arquivo[], hash *HASH, Nodes *root,
 
 	file_output = fopen(nome_file_output, "wb");
 	get_header_compactacao(file_output, HASH, root, size_tree);
-	//printf("PRE ORDEM: ");
-	//print_tree_huffman(root);
-	//printf("\n");
-	//convert_size_tree_to_bin(size_tree, bin_tam);
-	/*for (i = 0; i < 14; i++) {
-	 printf("%d", bin_tam[i]);
-	 }
-	 printf("\n");*/
 	insert_file_binary(file_input, file_output, HASH, nome_arquivo);
 }
 void compress() {
