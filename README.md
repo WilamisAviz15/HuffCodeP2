@@ -8,6 +8,6 @@ Este projeto tem o objetivo da criação de um programa capaz de compactar e des
 ### Participantes:
 * Elygledson José         - Ciência da Computação       - ejsb2@ic.ufal.br
 * Yago Felipe             - Ciência da Computação       - yflf@ic.ufal.br
-* Marconde José da Silva  - Ciência da Computação       - FALTA MANDAR
+* Marconde José da Silva  - Ciência da Computação       - mjsl@ic.ufal.br
 * Alasson de Araújo       - Ciência da Computação       - aaa4@ic.ufal.br
 * Wilamis Micael          - Engenharia de Computação    - wilamis.micael@gmail.com
