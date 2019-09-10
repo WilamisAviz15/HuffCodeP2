@@ -20,7 +20,7 @@ typedef struct Array {
 } heap;
 
 typedef struct SaveValues {
-	unsigned int frequency;
+	unsigned int frequencia;
 	unsigned char c;
 	unsigned char bits[10];
 } NewValue;
@@ -54,7 +54,7 @@ hash *create_hash()
     for (int i = 0; i < 256; i++)
     {
     	HASH->array[i] = (NewValue*) malloc(sizeof(NewValue));
-    	HASH->array[i]->frequency = 0;
+    	HASH->array[i]->frequencia = 0;
     	HASH->array[i]->bits[0] = '\0';
     }
     return HASH;
@@ -78,7 +78,7 @@ int GetChildrenRightIndex(int index) {
 	return index * 2 + 1;
 }
 
-int is_leaf(Nodes *huffman_node) {
+int eh_folha(Nodes *huffman_node) {
 	if ((huffman_node->left == NULL) && (huffman_node->right == NULL)) {
 		return 1;
 	} else {
@@ -86,7 +86,7 @@ int is_leaf(Nodes *huffman_node) {
 	}
 }
 
-int is_empty(Nodes *root) {
+int esta_vazia(Nodes *root) {
 	return (root == NULL);
 }
 
@@ -168,36 +168,33 @@ void Insert(int Value, char character, heap *Heap, Nodes *left, Nodes *right) {
 void print_tree_huffman(Nodes *huffman_node) {
 	if (huffman_node != NULL) {
 		if (((huffman_node->character == '*') || (huffman_node->character == '\\'))
-				&& is_leaf(huffman_node)) {
-			printf("\\%c", 92);
+				&& eh_folha(huffman_node)) {
+			printf("%c", 92);
 		}
-		else
-		{
-			printf("%c", huffman_node->character);
-			print_tree_huffman(huffman_node->left);
-			print_tree_huffman(huffman_node->right);
-		}
+
+		printf("%c", huffman_node->character);
+		print_tree_huffman(huffman_node->left);
+		print_tree_huffman(huffman_node->right);
 	}
 }
 
 void print_tree_huffman_file(FILE *output_file, Nodes *huffman_node) {
 	if (huffman_node != NULL) {
-		if (((huffman_node->character == '*') || (huffman_node->character == '\\'))
-				&& is_leaf(huffman_node)) {
-			fprintf(output_file, "\\%c", '*');
-		} else {
-			fprintf(output_file, "%c", huffman_node->character);
-			print_tree_huffman_file(output_file, huffman_node->left);
-			print_tree_huffman_file(output_file, huffman_node->right);
+		if (((huffman_node->character == '*') || (huffman_node->character == 92))
+				&& eh_folha(huffman_node)) {
+			fprintf(output_file, "%c", 92);
 		}
 
+		fprintf(output_file, "%c", huffman_node->character);
+		print_tree_huffman_file(output_file, huffman_node->left);
+		print_tree_huffman_file(output_file, huffman_node->right);
 	}
 }
 
 int lenght_tree(Nodes *root) {
 	int count = 0;
-	if (!is_empty(root)) {
-		if (is_leaf(root)
+	if (!esta_vazia(root)) {
+		if (eh_folha(root)
 				&& (root->character == '*' || root->character == 92)) {
 			count = 1;
 		}
@@ -209,15 +206,15 @@ int lenght_tree(Nodes *root) {
 	return count;
 }
 
-int count_trash_file(hash *HASH)
+int Cont_lixo_file(hash *HASH)
 {
 	int i;
 	long long int trash = 0;
 	for(i = 0; i < 256; i ++)
 	{
-		 if(HASH->array[i]->frequency >= 1)
+		 if(HASH->array[i]->frequencia >= 1)
 		 {
-			 trash += strlen(HASH->array[i]->bits) * HASH->array[i]->frequency;
+			 trash += strlen(HASH->array[i]->bits) * HASH->array[i]->frequencia;
 		 }
 	 }
 
