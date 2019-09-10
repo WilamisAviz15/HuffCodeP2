@@ -169,25 +169,28 @@ void print_tree_huffman(Nodes *huffman_node) {
 	if (huffman_node != NULL) {
 		if (((huffman_node->character == '*') || (huffman_node->character == '\\'))
 				&& is_leaf(huffman_node)) {
-			printf("%c", 92);
+			printf("\\%c", 92);
 		}
-
-		printf("%c", huffman_node->character);
-		print_tree_huffman(huffman_node->left);
-		print_tree_huffman(huffman_node->right);
+		else
+		{
+			printf("%c", huffman_node->character);
+			print_tree_huffman(huffman_node->left);
+			print_tree_huffman(huffman_node->right);
+		}
 	}
 }
 
 void print_tree_huffman_file(FILE *output_file, Nodes *huffman_node) {
 	if (huffman_node != NULL) {
-		if (((huffman_node->character == '*') || (huffman_node->character == 92))
+		if (((huffman_node->character == '*') || (huffman_node->character == '\\'))
 				&& is_leaf(huffman_node)) {
-			fprintf(output_file, "%c", 92);
+			fprintf(output_file, "\\%c", '*');
+		} else {
+			fprintf(output_file, "%c", huffman_node->character);
+			print_tree_huffman_file(output_file, huffman_node->left);
+			print_tree_huffman_file(output_file, huffman_node->right);
 		}
 
-		fprintf(output_file, "%c", huffman_node->character);
-		print_tree_huffman_file(output_file, huffman_node->left);
-		print_tree_huffman_file(output_file, huffman_node->right);
 	}
 }
 
