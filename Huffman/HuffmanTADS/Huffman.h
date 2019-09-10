@@ -20,7 +20,7 @@ typedef struct Array {
 } heap;
 
 typedef struct SaveValues {
-	unsigned int frequencia;
+	unsigned int frequency;
 	unsigned char c;
 	unsigned char bits[10];
 } NewValue;
@@ -37,7 +37,6 @@ Nodes *CreatNode(int data, char character, Nodes * left, Nodes *right) {
 	node->right = right;
 	return node;
 }
-/*It's in this function where we creat a array of pointers*/
 
 heap *CreatTable(int size_table) {
 	int i;
@@ -55,13 +54,12 @@ hash *create_hash()
     for (int i = 0; i < 256; i++)
     {
     	HASH->array[i] = (NewValue*) malloc(sizeof(NewValue));
-    	HASH->array[i]->frequencia = 0;
+    	HASH->array[i]->frequency = 0;
     	HASH->array[i]->bits[0] = '\0';
     }
     return HASH;
 }
 
-// swap two min heap nodes//
 void Swap(Nodes **a, Nodes **b) {
 	Nodes *t = *a;
 	*a = *b;
@@ -80,7 +78,7 @@ int GetChildrenRightIndex(int index) {
 	return index * 2 + 1;
 }
 
-int eh_folha(Nodes *huffman_node) {
+int is_leaf(Nodes *huffman_node) {
 	if ((huffman_node->left == NULL) && (huffman_node->right == NULL)) {
 		return 1;
 	} else {
@@ -88,8 +86,8 @@ int eh_folha(Nodes *huffman_node) {
 	}
 }
 
-int esta_vazia(Nodes *raiz) {
-	return (raiz == NULL);
+int is_empty(Nodes *root) {
+	return (root == NULL);
 }
 
 int is_bit_set(unsigned char byte, int i) {
@@ -109,7 +107,6 @@ void View(heap *Heap) {
 	for (i = 1; i <= Heap->size; i++) {
 		printf(" %d %c ", Heap->table[i]->frequency, Heap->table[i]->character);
 	}
-	//printf("\n");
 }
 
 void DownHeapMin(int index, heap *Heap) {
@@ -171,7 +168,7 @@ void Insert(int Value, char character, heap *Heap, Nodes *left, Nodes *right) {
 void print_tree_huffman(Nodes *huffman_node) {
 	if (huffman_node != NULL) {
 		if (((huffman_node->character == '*') || (huffman_node->character == '\\'))
-				&& eh_folha(huffman_node)) {
+				&& is_leaf(huffman_node)) {
 			printf("%c", 92);
 		}
 
@@ -184,7 +181,7 @@ void print_tree_huffman(Nodes *huffman_node) {
 void print_tree_huffman_file(FILE *output_file, Nodes *huffman_node) {
 	if (huffman_node != NULL) {
 		if (((huffman_node->character == '*') || (huffman_node->character == 92))
-				&& eh_folha(huffman_node)) {
+				&& is_leaf(huffman_node)) {
 			fprintf(output_file, "%c", 92);
 		}
 
@@ -194,35 +191,35 @@ void print_tree_huffman_file(FILE *output_file, Nodes *huffman_node) {
 	}
 }
 
-int lenght_tree(Nodes *raiz) {
-	int cont = 0;
-	if (!esta_vazia(raiz)) {
-		if (eh_folha(raiz)
-				&& (raiz->character == '*' || raiz->character == 92)) {
-			cont = 1;
+int lenght_tree(Nodes *root) {
+	int count = 0;
+	if (!is_empty(root)) {
+		if (is_leaf(root)
+				&& (root->character == '*' || root->character == 92)) {
+			count = 1;
 		}
 
-		cont = cont + 1 + lenght_tree(raiz->left);
-		cont = cont + lenght_tree(raiz->right);
+		count = count + 1 + lenght_tree(root->left);
+		count = count + lenght_tree(root->right);
 	}
 
-	return (cont);
+	return count;
 }
 
-int Cont_lixo_file(hash *HASH)
+int count_trash_file(hash *HASH)
 {
 	int i;
-	long long int lixo = 0;
+	long long int trash = 0;
 	for(i = 0; i < 256; i ++)
 	{
-		 if(HASH->array[i]->frequencia >= 1)
+		 if(HASH->array[i]->frequency >= 1)
 		 {
-			 lixo += strlen(HASH->array[i]->bits) * HASH->array[i]->frequencia;
+			 trash += strlen(HASH->array[i]->bits) * HASH->array[i]->frequency;
 		 }
 	 }
 
-	 lixo = 8 - (lixo % 8);
+	trash = 8 - (trash % 8);
 
-	 return lixo;
+	 return trash;
 }
 #endif
