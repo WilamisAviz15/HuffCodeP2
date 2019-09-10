@@ -25,4 +25,4 @@ Será necessário baixar todos os arquivos da pasta Huffman e compilar a classe 
 
 Na pasta HuffmanTADS estão os Tipos Abstrato de Dados utilizado nas estruturas. Contém os arquivos:
 * Huffman.h: Biblioteca criada para armazenar as estruturas: Nodes, Heap e Hash assim como os seus tipos abstratos necessários e propriedades para utilização das estrutruras.
-* Funcoes.h: Biblioteca criada com todas as funções usadas em todo o algoritmo no qual está comentada o que cada função faz e no que é utilizada, serve como documentação para as funções.
+* Functions.h: Biblioteca criada com todas as funções usadas em todo o algoritmo no qual está comentada o que cada função faz e no que é utilizada, serve como documentação para as funções.
