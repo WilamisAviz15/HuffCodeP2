@@ -12,9 +12,8 @@ void conting_freq(FILE *file_input, hash *Hash) {
 }
 
 Nodes *construct_tree(char nome_arquivo[], FILE *file_input, hash *Hash) {
-	FILE *file_output; //variavel que guardará o arquivo de entrada e saida
+	FILE *file_output;
 	unsigned char caracter;
-	//char nome_arquivo[30];
 	Nodes *root, *left, *right, *top;
 	int byte = 0;
 
@@ -35,8 +34,6 @@ Nodes *construct_tree(char nome_arquivo[], FILE *file_input, hash *Hash) {
 	for (i = 0; i < 256; i++) {
 		if (Hash->array[i]->frequencia >= 1) {
 			Insert(Hash->array[i]->frequencia, i, Heap, NULL, NULL);
-			/*printf("Characters: %c Frequency: %d\n", i,
-			 Hash->array[i]->frequencia);*/
 		}
 	}
 
@@ -136,7 +133,6 @@ void compress() {
 	int tam_str = strlen(vetor);
 	size_tree = lenght_tree(root);
 	int tam_lixo = Cont_lixo_file(HASH);
-	//printf("LIXO: %d\n", tam_lixo);
 	insert_header_file(nome_arquivo, HASH, root, size_tree, file_input);
 	printf("Compactado com sucesso!\n");
 }
